@@ -2,8 +2,8 @@
 // per-panel photo picking, drag-to-pan and scroll-to-zoom on the live preview,
 // and PNG export in the three post sizes. A `?shot=` query sets up a fixed
 // scene for a screenshot instead (./shots.js).
-import { drawPoster, panelRects, SIZES } from './cover.js';
-import { runShot } from './shots.js';
+import { drawPoster, panelRects, SIZES, SAMPLES, LAYOUTS } from './cover.js';
+import { runShot, distinctPanels } from './shots.js';
 
 const canvas = document.getElementById('poster');
 const titleInput = document.getElementById('title');
@@ -15,11 +15,11 @@ const panelLabel = document.getElementById('panelLabel');
 
 /** The poster state: layout, grade, size, caption and one entry per panel. */
 const state = {
-  layout: 'hero-duo',
+  layout: 'key-art',
   grade: 'sunset',
   size: '1080x1080',
-  title: 'Sunset Heist',
-  subtitle: 'One last score under the neon sky',
+  title: 'Neon Heist',
+  subtitle: 'One last score under the Vice sun',
   panels: [
     { photo: null, zoom: 1, ox: 0, oy: 0 },
     { photo: null, zoom: 1, ox: 0, oy: 0 },
@@ -29,7 +29,7 @@ const state = {
   selected: 0,
 };
 
-/** Loaded photos by key: the two built-in samples plus anything uploaded. */
+/** Loaded photos by key: the four built-in samples plus anything uploaded. */
 const photos = {};
 let uploadCount = 0;
 
@@ -208,7 +208,9 @@ document.getElementById('export').addEventListener('click', () => {
   }, 'image/png');
 });
 
-/** Applies a shot scene's state, for screenshots. */
+/** Applies a shot scene's state, for screenshots. Panels are de-duplicated:
+ *  a poster never shows the same photo twice; a repeated request is swapped
+ *  for the next unused sample, and any panel left over gets the skyline. */
 export function applyScene(scene) {
   if (scene.layout) state.layout = scene.layout;
   if (scene.grade) state.grade = scene.grade;
@@ -216,17 +218,24 @@ export function applyScene(scene) {
   if (scene.title !== undefined) { state.title = scene.title; titleInput.value = scene.title; }
   if (scene.subtitle !== undefined) { state.subtitle = scene.subtitle; subtitleInput.value = scene.subtitle; }
   if (scene.panels) {
-    scene.panels.forEach((entry, i) => {
-      const spec = typeof entry === 'string' ? { photo: entry } : entry;
-      if (spec && spec.photo && photos[spec.photo]) {
-        state.panels[i] = {
-          photo: spec.photo,
+    const requested = scene.panels.map((entry) => (typeof entry === 'string' ? entry : entry?.photo)).filter(Boolean);
+    const filled = distinctPanels(requested, state.layout);
+    state.panels = filled.map((entry, i) => {
+      if (typeof entry === 'string') {
+        const spec = scene.panels[i] && typeof scene.panels[i] === 'object' ? scene.panels[i] : {};
+        return {
+          photo: photos[entry] ? entry : null,
+          skyline: !photos[entry],
           zoom: spec.zoom ?? 1,
           ox: spec.ox ?? 0,
           oy: spec.oy ?? 0,
         };
       }
+      return { photo: null, skyline: true, zoom: 1, ox: 0, oy: 0 };
     });
+    while (state.panels.length < LAYOUTS[state.layout].length) {
+      state.panels.push({ photo: null, skyline: true, zoom: 1, ox: 0, oy: 0 });
+    }
   }
   document.querySelectorAll('.layout-btn').forEach((b) => b.classList.toggle('active', b.dataset.layout === state.layout));
   document.querySelectorAll('.grade-btn').forEach((b) => b.classList.toggle('active', b.dataset.grade === state.grade));
@@ -238,6 +247,8 @@ export function applyScene(scene) {
 // --- Boot: load the samples, then draw (or run the screenshot scene) ---
 const shot = new URLSearchParams(location.search).get('shot');
 async function boot() {
+  photos.neon = await loadImage('samples/neon.jpg');
+  photos.street = await loadImage('samples/street.jpg');
   photos.pier = await loadImage('samples/pier.jpg');
   photos.boulevard = await loadImage('samples/boulevard.jpg');
   await document.fonts.load('700 40px "Poster Bold"');
@@ -245,12 +256,10 @@ async function boot() {
   if (shot) {
     await runShot(shot, new URLSearchParams(location.search), applyScene);
   } else {
-    // A one-click start: the pier fills the hero, the boulevard the small panels.
-    assignPhoto('pier');
-    state.selected = 1;
-    assignPhoto('boulevard');
-    state.selected = 2;
-    assignPhoto('boulevard');
+    // A one-click start: distinct samples across the panels, never repeated.
+    const count = LAYOUTS[state.layout].length;
+    state.panels = SAMPLES.slice(0, count).map((photo) => ({ photo, zoom: 1, ox: 0, oy: 0 }));
+    while (state.panels.length < 4) state.panels.push({ photo: null, zoom: 1, ox: 0, oy: 0 });
     state.selected = 0;
   }
   resizePreview();

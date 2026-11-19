@@ -29,7 +29,10 @@
     <section>
       <h2>1 · Layout</h2>
       <div class="layout-grid" id="layouts">
-        <button type="button" data-layout="hero-duo" class="layout-btn active" aria-label="Hero plus two panels">
+        <button type="button" data-layout="key-art" class="layout-btn active" aria-label="Full-bleed hero plus skyline band">
+          <span class="thumb key-art"><i></i><i></i></span>Key Art
+        </button>
+        <button type="button" data-layout="hero-duo" class="layout-btn" aria-label="Hero plus two panels">
           <span class="thumb hero-duo"><i></i><i></i><i></i></span>Hero + Duo
         </button>
         <button type="button" data-layout="hero-trio" class="layout-btn" aria-label="Hero plus three panels">
@@ -57,10 +60,10 @@
     <section>
       <h2>3 · Caption</h2>
       <label>Title
-        <input id="title" type="text" maxlength="40" value="Sunset Heist" autocomplete="off">
+        <input id="title" type="text" maxlength="40" value="Neon Heist" autocomplete="off">
       </label>
       <label>Subtitle
-        <input id="subtitle" type="text" maxlength="60" value="One last score under the neon sky" autocomplete="off">
+        <input id="subtitle" type="text" maxlength="60" value="One last score under the Vice sun" autocomplete="off">
       </label>
       <p class="hint">Your words, your lettering — bold poster type with a sunset gradient.</p>
     </section>
@@ -84,6 +87,12 @@
         <button id="fillAll" type="button" class="mini-btn">Use this photo in every panel</button>
       </div>
       <div class="photo-pick" id="photoPick">
+        <button type="button" data-photo="neon" class="photo-btn">
+          <img src="./samples/neon.jpg" alt="Sample photo: neon street at dusk">Neon Street
+        </button>
+        <button type="button" data-photo="street" class="photo-btn">
+          <img src="./samples/street.jpg" alt="Sample photo: beach boulevard at sunset">Beach Blvd
+        </button>
         <button type="button" data-photo="pier" class="photo-btn">
           <img src="./samples/pier.jpg" alt="Sample photo: pier at sunset">Pier
         </button>
