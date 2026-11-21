@@ -12,15 +12,19 @@ GTA 6's posters, and export it as a PNG to share. Built for the
 ## What it does
 
 - **Multi-panel posters** — four layouts (Hero + Duo, Hero + Trio, Split Duo,
-  Quad). Fill several panels with one photo or a different photo per panel.
+  Quad) of full-bleed photos, edge to edge. Fill several panels with one
+  photo or a different photo per panel — a poster never repeats a photo.
 - **Any photo** — load your own from your machine (never uploaded) or start
-  in one click with the two built-in sample photos. Click a panel to select
+  in one click with the four built-in sample photos. Click a panel to select
   it, drag the photo to position it, scroll or use the slider to zoom.
-- **Colour grades** — Sunset, Neon, Vice Pink and Noir, painted over the
-  whole poster with a retro striped sun disc.
-- **Bold poster lettering** — a big gradient title and a letterspaced
-  subtitle, set in Liberation Sans Bold (SIL Open Font License, shipped
-  under `app/fonts/` with its licence).
+- **Colour grades** — Sunset, Neon, Vice Pink and Noir, each with its own
+  filter, tint, frame and title gradient, painted over the whole poster
+  with a retro striped sun disc. Noir skips the sun and gets a deep
+  vignette instead, so its blacks stay rich and its highlights pop.
+- **Bold poster lettering** — one huge gradient title overlaid on the
+  artwork itself over a soft bottom scrim, with a clean letterspaced
+  tagline beneath it. No footer band: nothing shrinks the photos and
+  nothing clips the words.
 - **Export** — 1080 × 1080, 1080 × 1350 and 1920 × 1080 PNG, rendered at
   full size on canvas. Live preview the whole way; three steps from photo
   to PNG.
@@ -28,12 +32,13 @@ GTA 6's posters, and export it as a PNG to share. Built for the
 ## Screenshots
 
 - `1-cover.jpg` — a wide 1920 × 1080 cover, Hero + Duo, Sunset grade
-  ("Sunset Heist")
-- `2-editor.jpg` — the editor in the browser with a photo loaded
-- `3-cover.jpg` — a portrait 1080 × 1350 cover, Hero + Trio, Neon grade
-  ("Neon Nights")
-- `4-cover.jpg` — a square 1080 × 1080 cover, Split Duo, Vice Pink grade
-  ("Boulevard Queen")
+  ("Neon Heist")
+- `2-editor.jpg` — the editor in the browser with photos loaded,
+  Hero + Trio, Neon grade
+- `3-cover.jpg` — a portrait 1080 × 1350 cover, Hero + Trio, Vice Pink
+  grade ("Vice Heat")
+- `4-cover.jpg` — a square 1080 × 1080 cover, Split Duo, Noir grade
+  ("Midnight Run")
 
 All four were taken with headless Chromium from the app itself (see
 `shots.json` for the exact scenes); the photos are the kit's image-model
@@ -58,7 +63,7 @@ wordmark, official artwork, character or font is used anywhere.
 - `app/src/main.js` — the editor wiring (panels, drag/zoom, export)
 - `app/src/shots.js` — fixed scenes for screenshots
 - `app/fonts/` — Liberation Sans Bold (SIL OFL 1.1) + licence text
-- `app/samples/` — two image-model sample photos, free to use
+- `app/samples/` — four image-model sample photos, free to use
 - `main.ts` — hands the app in (copies `app/` + `screenshots/`, writes the dossier)
 - `screenshots/` — the cover and editor screenshots
 

@@ -15,7 +15,7 @@ const panelLabel = document.getElementById('panelLabel');
 
 /** The poster state: layout, grade, size, caption and one entry per panel. */
 const state = {
-  layout: 'key-art',
+  layout: 'hero-duo',
   grade: 'sunset',
   size: '1080x1080',
   title: 'Neon Heist',
@@ -208,9 +208,9 @@ document.getElementById('export').addEventListener('click', () => {
   }, 'image/png');
 });
 
-/** Applies a shot scene's state, for screenshots. Panels are de-duplicated:
- *  a poster never shows the same photo twice; a repeated request is swapped
- *  for the next unused sample, and any panel left over gets the skyline. */
+/** Applies a shot scene's state, for screenshots. Panels are de-duplicated
+ *  first: a poster never shows the same photo twice, so a repeated request
+ *  is swapped for the next unused sample before anything is assigned. */
 export function applyScene(scene) {
   if (scene.layout) state.layout = scene.layout;
   if (scene.grade) state.grade = scene.grade;
@@ -225,16 +225,15 @@ export function applyScene(scene) {
         const spec = scene.panels[i] && typeof scene.panels[i] === 'object' ? scene.panels[i] : {};
         return {
           photo: photos[entry] ? entry : null,
-          skyline: !photos[entry],
           zoom: spec.zoom ?? 1,
           ox: spec.ox ?? 0,
           oy: spec.oy ?? 0,
         };
       }
-      return { photo: null, skyline: true, zoom: 1, ox: 0, oy: 0 };
+      return { photo: null, zoom: 1, ox: 0, oy: 0 };
     });
     while (state.panels.length < LAYOUTS[state.layout].length) {
-      state.panels.push({ photo: null, skyline: true, zoom: 1, ox: 0, oy: 0 });
+      state.panels.push({ photo: null, zoom: 1, ox: 0, oy: 0 });
     }
   }
   document.querySelectorAll('.layout-btn').forEach((b) => b.classList.toggle('active', b.dataset.layout === state.layout));

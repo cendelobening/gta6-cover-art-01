@@ -10,9 +10,10 @@
 import { LAYOUTS, SAMPLES } from './cover.js';
 
 /** Distinct panels for a layout: the requested names in order, duplicates
- *  swapped for the next unused sample, then the rotation continues. */
+ *  swapped for the next unused sample, then the rotation continues. When
+ *  every sample is already on the poster the panel stays empty. */
 export function distinctPanels(requested, layout) {
-  const count = (LAYOUTS[layout] || LAYOUTS['key-art']).length;
+  const count = (LAYOUTS[layout] || LAYOUTS['hero-duo']).length;
   const used = new Set();
   const out = [];
   const pool = [...requested, ...SAMPLES];
@@ -22,7 +23,7 @@ export function distinctPanels(requested, layout) {
       pick = SAMPLES.find((s) => !used.has(s));
     }
     if (pick === undefined) {
-      out.push({ photo: null, skyline: true });
+      out.push({ photo: null });
     } else {
       used.add(pick);
       out.push(pick);
@@ -33,9 +34,9 @@ export function distinctPanels(requested, layout) {
 
 export async function runShot(shot, query, applyScene) {
   if (shot === 'cover') document.body.classList.add('shot-cover');
-  const layout = query.get('layout') ?? 'key-art';
-  const hero = query.get('photo') ?? 'neon';
-  const small = query.get('photo2') ?? 'street';
+  const layout = query.get('layout') ?? 'hero-duo';
+  const hero = query.get('photo') ?? 'pier';
+  const small = query.get('photo2') ?? 'boulevard';
   const listed = query.get('panels');
   const requested = listed
     ? listed.split(',').map((name) => name.trim()).filter(Boolean)
@@ -46,8 +47,8 @@ export async function runShot(shot, query, applyScene) {
     layout,
     grade: query.get('grade') ?? 'sunset',
     size: query.get('size') ?? '1920x1080',
-    title: query.get('caption') ?? 'Neon Heist',
-    subtitle: query.get('sub') ?? 'One last score under the Vice sun',
+    title: query.get('caption') ?? 'Sunset Heist',
+    subtitle: query.get('sub') ?? 'One last score under the neon sky',
     panels: panels.map((entry, i) => {
       if (typeof entry === 'string') return i === 0 && oy ? { photo: entry, oy } : entry;
       return entry;

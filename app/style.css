@@ -66,9 +66,6 @@ body {
 .layout-btn.active { border-color: #ff7e2e; background: #3d2149; box-shadow: 0 0 0 1px #ff7e2e; }
 .thumb { display: grid; width: 64px; height: 44px; gap: 2px; background: #fff; padding: 2px; border-radius: 3px; }
 .thumb i { background: linear-gradient(135deg, #ff7e2e, #c2439b); border-radius: 1px; }
-.thumb.key-art { grid-template-columns: 1fr 1fr; grid-template-rows: 1.5fr 1fr; }
-.thumb.key-art i:nth-child(1) { grid-column: 1 / 3; }
-.thumb.key-art i:nth-child(2) { grid-column: 1 / 3; background: linear-gradient(90deg, #2b0f3d, #ff2e88); }
 .thumb.hero-duo { grid-template-columns: 1fr 1fr; grid-template-rows: 1.5fr 1fr; }
 .thumb.hero-duo i:nth-child(1) { grid-column: 1 / 3; }
 .thumb.hero-trio { grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1.4fr 1fr; }
@@ -106,8 +103,8 @@ body {
   border: 1px solid #452a56; border-radius: 14px;
 }
 #poster {
-  max-width: 100%; max-height: 62vh; width: auto; height: auto;
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.12);
+  max-width: 100%; max-height: 66vh; width: auto; height: auto;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.14);
   cursor: grab; touch-action: none; border-radius: 2px;
 }
 #poster:active { cursor: grabbing; }

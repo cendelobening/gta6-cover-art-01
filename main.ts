@@ -1,9 +1,11 @@
 // Vice Cover Studio — the gta6-cover-art-01 entry (Node 22, standard library
 // only). The app is this directory's app/ folder: plain static files a desktop
 // browser loads offline (app/index.html and its ES modules, one SIL-licensed
-// font under app/fonts/, two image-model sample photos under app/samples/),
+// font under app/fonts/, four image-model sample photos under app/samples/),
 // and it turns a person's photo and a caption into a multi-panel GTA-style
-// poster cover with a Vice City sunset or neon grade, exported as a PNG in
+// poster cover: full-bleed photo panels with the caption as one huge
+// gradient title overlaid on the artwork, in a Vice City sunset or neon
+// grade, exported as a PNG in
 // 1080 x 1080, 1080 x 1350 or 1920 x 1080. This program hands it in: it
 // copies app/ and screenshots/ from beside this file to /output and writes
 // /output/dossier.json, the summary the judge reads, with the vendored
@@ -30,6 +32,7 @@ const shots = readdirSync(join(here, 'screenshots')).filter((f) => !f.startsWith
 if (shots.length < 3 || shots.length > 4) throw new Error(`expected 3-4 screenshots, found ${shots.length}`);
 for (const shot of shots) {
   if (statSync(join(here, 'screenshots', shot)).size > 262144) throw new Error(`screenshot ${shot} is over 256 KiB`);
+  if (!/\.(png|jpe?g)$/i.test(shot)) throw new Error(`screenshot ${shot} is not a PNG or JPEG`);
 }
 
 mkdirSync(out, { recursive: true });
