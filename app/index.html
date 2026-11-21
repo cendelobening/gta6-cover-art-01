@@ -1,114 +1,74 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Vice Cover Studio: turn your photo and a caption into a multi-panel GTA-style poster cover, offline, exported as PNG.">
-<title>Vice Cover Studio — GTA-style poster cover maker</title>
-<link rel="stylesheet" href="./style.css">
+<title>Vice Cover Studio — GTA-style cover art maker</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<noscript><p style="padding:16px">Vice Cover Studio needs JavaScript to draw your poster cover.</p></noscript>
-<header class="topbar">
-  <div class="brand">
-    <span class="brand-mark">VC</span>
-    <div>
-      <h1>Vice Cover Studio</h1>
-      <p>Turn your photo into a multi-panel poster cover. Offline, no upload.</p>
-    </div>
-  </div>
-  <div class="sizes" role="group" aria-label="Export size">
-    <button type="button" data-size="1080x1080" class="size-btn active">1080 × 1080</button>
-    <button type="button" data-size="1080x1350" class="size-btn">1080 × 1350</button>
-    <button type="button" data-size="1920x1080" class="size-btn">1920 × 1080</button>
-  </div>
+<header id="app-bar">
+  <div class="brand">VICE COVER STUDIO</div>
+  <p class="brand-sub">Turn photos into multi-panel cover-art posters. Offline, nothing uploads.</p>
 </header>
-
-<main class="app">
-  <aside class="panel controls" aria-label="Poster controls">
-    <section>
-      <h2>1 · Layout</h2>
-      <div class="layout-grid" id="layouts">
-        <button type="button" data-layout="hero-duo" class="layout-btn active" aria-label="Hero plus two panels">
-          <span class="thumb hero-duo"><i></i><i></i><i></i></span>Hero + Duo
-        </button>
-        <button type="button" data-layout="hero-trio" class="layout-btn" aria-label="Hero plus three panels">
-          <span class="thumb hero-trio"><i></i><i></i><i></i><i></i></span>Hero + Trio
-        </button>
-        <button type="button" data-layout="split" class="layout-btn" aria-label="Two side by side panels">
-          <span class="thumb split"><i></i><i></i></span>Split Duo
-        </button>
-        <button type="button" data-layout="quad" class="layout-btn" aria-label="Four panels">
-          <span class="thumb quad"><i></i><i></i><i></i><i></i></span>Quad
-        </button>
-      </div>
-    </section>
-
-    <section>
-      <h2>2 · Colour grade</h2>
-      <div class="grade-row" id="grades">
-        <button type="button" data-grade="sunset" class="grade-btn active"><span class="swatch sunset"></span>Sunset</button>
-        <button type="button" data-grade="neon" class="grade-btn"><span class="swatch neon"></span>Neon</button>
-        <button type="button" data-grade="vice" class="grade-btn"><span class="swatch vice"></span>Vice Pink</button>
-        <button type="button" data-grade="noir" class="grade-btn"><span class="swatch noir"></span>Noir</button>
-      </div>
-    </section>
-
-    <section>
-      <h2>3 · Caption</h2>
-      <label>Title
-        <input id="title" type="text" maxlength="40" value="Neon Heist" autocomplete="off">
-      </label>
-      <label>Subtitle
-        <input id="subtitle" type="text" maxlength="60" value="One last score under the Vice sun" autocomplete="off">
-      </label>
-      <p class="hint">Your words, your lettering — one huge gradient title laid over the artwork itself, tagline underneath.</p>
-    </section>
-
-    <section>
-      <h2>4 · Export</h2>
-      <button id="export" type="button" class="export-btn">Export PNG</button>
-      <p id="status" role="status"></p>
-    </section>
-  </aside>
-
-  <section class="stage" aria-label="Poster preview">
-    <div class="canvas-wrap">
-      <canvas id="poster" width="880" height="880" aria-label="Live poster preview"></canvas>
+<main id="layout">
+  <section id="stage-wrap">
+    <div id="stage">
+      <div id="poster"></div>
     </div>
-    <p class="stage-hint">Click a panel to select it · drag the photo to move it · scroll to zoom</p>
-
-    <div class="panel-editor" id="panelEditor" aria-label="Selected panel">
-      <div class="panel-editor-head">
-        <strong id="panelLabel">Panel 1</strong>
-        <button id="fillAll" type="button" class="mini-btn">Use this photo in every panel</button>
-      </div>
-      <div class="photo-pick" id="photoPick">
-        <button type="button" data-photo="neon" class="photo-btn">
-          <img src="./samples/neon.jpg" alt="Sample photo: neon street at dusk">Neon Street
-        </button>
-        <button type="button" data-photo="street" class="photo-btn">
-          <img src="./samples/street.jpg" alt="Sample photo: beach boulevard at sunset">Beach Blvd
-        </button>
-        <button type="button" data-photo="pier" class="photo-btn">
-          <img src="./samples/pier.jpg" alt="Sample photo: pier at sunset">Pier
-        </button>
-        <button type="button" data-photo="boulevard" class="photo-btn">
-          <img src="./samples/boulevard.jpg" alt="Sample photo: neon boulevard">Boulevard
-        </button>
-        <label class="photo-btn upload-btn">Upload photo
-          <input id="upload" type="file" accept="image/*" hidden>
-        </label>
-        <button type="button" id="clearPhoto" class="photo-btn">Clear</button>
-      </div>
-      <label class="zoom-row">Zoom
-        <input id="zoom" type="range" min="1" max="2.5" step="0.01" value="1">
-        <span id="zoomVal">100%</span>
-      </label>
-    </div>
+    <p id="stage-hint">Click a panel to select it, then pick a photo for it below.</p>
   </section>
+  <aside id="controls">
+    <label class="field">
+      <span>Title</span>
+      <input id="title-input" type="text" value="VICE CITY HEAT" maxlength="30">
+    </label>
+    <label class="field">
+      <span>Tagline</span>
+      <input id="tagline-input" type="text" value="ONE LAST SCORE AT SUNSET" maxlength="48">
+    </label>
+    <div class="field-row">
+      <label class="field">
+        <span>Layout</span>
+        <select id="layout-select"></select>
+      </label>
+      <label class="field">
+        <span>Poster size</span>
+        <select id="size-select"></select>
+      </label>
+      <label class="field">
+        <span>Grade</span>
+        <select id="grade-select"></select>
+      </label>
+    </div>
+    <div class="field">
+      <span id="slot-label">Panel 1</span>
+      <div id="thumbs"></div>
+    </div>
+    <label class="field">
+      <span>Use your own photo for this panel</span>
+      <input id="upload-input" type="file" accept="image/*">
+    </label>
+    <div class="field-row sliders">
+      <label class="field">
+        <span>Zoom</span>
+        <input id="zoom-input" type="range" min="1" max="2.4" step="0.02" value="1">
+      </label>
+      <label class="field">
+        <span>Shift X</span>
+        <input id="ox-input" type="range" min="-30" max="30" step="1" value="0">
+      </label>
+      <label class="field">
+        <span>Shift Y</span>
+        <input id="oy-input" type="range" min="-30" max="30" step="1" value="0">
+      </label>
+    </div>
+    <div class="actions">
+      <button id="randomize-btn" type="button">Randomize</button>
+      <button id="export-btn" type="button">Export PNG</button>
+    </div>
+  </aside>
 </main>
-
-<script type="module" src="./src/main.js"></script>
+<script type="module" src="src/main.js"></script>
 </body>
 </html>
